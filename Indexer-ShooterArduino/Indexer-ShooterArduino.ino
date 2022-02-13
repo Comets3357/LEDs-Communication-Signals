@@ -6,13 +6,14 @@
  #include <avr/power.h> // Required for 16 MHz Adafruit Trinket
 #endif
 
-#define LED_PIN    5
-#define LED_COUNT 30
+#define LED_PIN    5 //SUBJECT TO CHANGE IF I COULD BOLD THINGS IN CODE THIS WOULD 100% BE BOLD BUT SERIOUSLY IF IT'S NOT WORKING IT'S PROBABLY THIS
+#define LED_COUNT 30 //SUBJECT TO CHANGE IF I COULD BOLD THINGS IN CODE THIS WOULD 100% BE BOLD BUT SERIOUSLY IF IT'S NOT WORKING IT'S PROBABLY THIS
 
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 int LED = 13;
 int x = 0;
+
 void setup() {
   Serial.begin(9600);
   
@@ -36,30 +37,56 @@ void setup() {
 
   Wire.setClock(400000);
 }
+
 void receiveEvent(int bytes) {
   x = Wire.read();    // read one character from the I2C
   Serial.println("it worked");
 }
+
 void loop() {
   // Fill along the length of the strip in various colors
-  if (x == 1) {
-    Serial.println("red");
-    colorWipe(strip.Color(255, 0, 0), 5); // Red
+  if (x == 0) {
+    Serial.println("red/blue");
+    firstHalfColorWipe(strip.Color(255, 0, 0), 5); // red
+    secondHalfColorWipe(strip.Color(0, 0, 255), 5); // blue
+  } else if (x == 1) {
+    Serial.println("blue/red");
+    firstHalfColorWipe(strip.Color(0, 0, 255), 5); // blue
+    secondHalfColorWipe(strip.Color(255, 0, 0), 5); // red
   } else if (x == 2) {
-    Serial.println("blue");
-    colorWipe(strip.Color(0, 0, 255), 5); // blue
+    Serial.println("red/black");
+    firstHalfColorWipe(strip.Color(255, 0, 0), 5); // red
+    secondHalfColorWipe(strip.Color(0, 0, 0), 5); // black (aka off)
   } else if (x == 3) {
-    Serial.println("white");
-    colorWipe(strip.Color(255, 255, 255), 5); // white
+    Serial.println("blue/black");
+    firstHalfColorWipe(strip.Color(0, 0, 255), 5); // blue
+    secondHalfColorWipe(strip.Color(0, 0, 0), 5); // black (aka off)
   } else if (x == 4) {
-    Serial.println("black");
-    colorWipe(strip.Color(0, 0, 0), 5); // black (aka off)
+    Serial.println("black/red");
+    firstHalfColorWipe(strip.Color(0, 0, 0), 5); // black (aka off)
+    secondHalfColorWipe(strip.Color(255, 0, 0), 5); // red
+  } else if (x == 5) {
+    Serial.println("black/blue");
+    firstHalfColorWipe(strip.Color(0, 0, 0), 5); // black (aka off)
+    secondHalfColorWipe(strip.Color(0, 0, 255), 5); // blue
+  } else if (x == 6) {
+    Serial.println("black/black");
+    firstHalfColorWipe(strip.Color(0, 0, 0), 5); // black (aka off)
+    secondHalfColorWipe(strip.Color(0, 0, 0), 5); // black (aka off)
   }
   receiveEvent(4);
 }
 
-void colorWipe(uint32_t color, int wait) {
-  for(int i=0; i<strip.numPixels(); i++) { // For each pixel in strip...
+void firstHalfColorWipe(uint32_t color, int wait) {
+  for(int i = 0; i < strip.numPixels() / 2; i++) { // For each pixel in strip...
+    strip.setPixelColor(i, color);         //  Set pixel's color (in RAM)
+    strip.show();                          //  Update strip to match
+    delay(wait);                           //  Pause for a moment
+  }
+}
+
+void secondHalfColorWipe(uint32_t color, int wait) {
+  for(int i = strip.numPixels() / 2; i < strip.numPixels(); i++) { // For each pixel in strip...
     strip.setPixelColor(i, color);         //  Set pixel's color (in RAM)
     strip.show();                          //  Update strip to match
     delay(wait);                           //  Pause for a moment
