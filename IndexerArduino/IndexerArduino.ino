@@ -73,6 +73,14 @@ void loop() {
     Serial.println("black/black");
     firstHalfColorWipe(strip.Color(0, 0, 0), 5); // black (aka off)
     secondHalfColorWipe(strip.Color(0, 0, 0), 5); // black (aka off)
+  } else if (x == 7) {
+    Serial.println("red/red");
+    firstHalfColorWipe(strip.Color(255, 0, 0), 5); // red (aka off)
+    secondHalfColorWipe(strip.Color(255, 0, 0), 5); // red (aka off)
+  } else if (x == 8) {
+    Serial.println("blue/blue");
+    firstHalfColorWipe(strip.Color(0, 0, 255), 5); // blue (aka off)
+    secondHalfColorWipe(strip.Color(0, 0, 255), 5); // blue (aka off)
   }
   receiveEvent(4);
 }
