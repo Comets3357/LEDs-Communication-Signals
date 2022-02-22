@@ -16,7 +16,7 @@ void setup() {
   Wire.onReceive(receiveEvent);
   
   FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
-  FastLED.setBrightness(255/4);
+  FastLED.setBrightness(255);
 
   Wire.setClock(400000);
 }
@@ -104,5 +104,5 @@ void rainbow(){
     FastLED.show();
     delay(50);
   }
-  delay(1000);
+  delay(500);
 }
