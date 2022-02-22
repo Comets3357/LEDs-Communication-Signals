@@ -1,93 +1,108 @@
-// Include the required Wire library for I2C<br>
+#include <FastLED.h>
 #include <Wire.h>
-#include <Adafruit_NeoPixel.h>
 
-#ifdef __AVR__
- #include <avr/power.h> // Required for 16 MHz Adafruit Trinket
-#endif
+#define LED_PIN     7
+#define NUM_LEDS    40
 
-#define LED_PIN    7
-#define LED_COUNT 40
-
-Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
-
-int LED = 13;
+CRGB leds[NUM_LEDS];
 int x = 0;
+
 void setup() {
   Serial.begin(9600);
   
-  // Define the LED pin as Output
-  pinMode (LED, OUTPUT);
   // Start the I2C Bus as Slave on address 1
   Wire.begin(1); 
   // Attach a function to trigger when something is received.
   Wire.onReceive(receiveEvent);
-
-  // These lines are specifically to support the Adafruit Trinket 5V 16 MHz.
-  // Any other board, you can remove this part (but no harm leaving it):
-#if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
-  clock_prescale_set(clock_div_1);
-#endif
-  // END of Trinket-specific code.
-
-  strip.begin();           // INITIALIZE NeoPixel strip object (REQUIRED)
-  strip.show();            // Turn OFF all pixels ASAP
-  strip.setBrightness(50); // Set BRIGHTNESS to about 1/5 (max = 255)
+  
+  FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
+  FastLED.setBrightness(255/4);
 
   Wire.setClock(400000);
 }
+
 void receiveEvent(int bytes) {
   x = Wire.read();    // read one character from the I2C
-  Serial.println("it worked");
 }
+
 void loop() {
   // Fill along the length of the strip in various colors
   if (x == 1) {
     Serial.println("red");
-    colorWipe(strip.Color(255, 0, 0), 5); // Red
+    for (int i = 0; i < 40; i++){
+      leds[i] = CRGB::Red;
+      FastLED.show();
+      delay(5);
+    }
   } else if (x == 2) {
     Serial.println("green");
-    colorWipe(strip.Color(0, 255, 0), 5); // Green
+    for (int i = 0; i < 40; i++){
+      leds[i] = CRGB::Green;
+      FastLED.show();
+      delay(5);
+    }
   } else if (x == 3) {
     Serial.println("blue");
-    colorWipe(strip.Color(0, 0, 255), 5); // Blue
+    for (int i = 0; i < 40; i++){
+      leds[i] = CRGB::Blue;
+      FastLED.show();
+      delay(5);
+    }
   } else if (x == 4) {
     Serial.println("yellow");
-    colorWipe(strip.Color(255, 255, 0), 5); // Yellow
+    for (int i = 0; i < 40; i++){
+      leds[i] = CRGB::Yellow;
+      FastLED.show();
+      delay(5);
+    }
   } else if (x == 5) {
     Serial.println("white");
-    colorWipe(strip.Color(255, 255, 255), 5); // White
-  } else{
-    theaterChaseRainbow(10);
+    for (int i = 0; i < 40; i++){
+      leds[i] = CRGB::White;
+      FastLED.show();
+      delay(5);
+    }
+  } else {
+    rainbow();
   }
   receiveEvent(4);
 }
 
-void colorWipe(uint32_t color, int wait) {
-  for(int i=0; i<strip.numPixels(); i++) { // For each pixel in strip...
-    strip.setPixelColor(i, color);         //  Set pixel's color (in RAM)
-    strip.show();                          //  Update strip to match
-    delay(wait);                           //  Pause for a moment
+void rainbow(){
+  for (int i = 0; i < 40; i++){
+    leds[i] = CRGB::Red;
+    FastLED.show();
+    delay(50);
   }
-}
-// Rainbow-enhanced theater marquee. Pass delay time (in ms) between frames.
-void theaterChaseRainbow(int wait) {
-  int firstPixelHue = 0;     // First pixel starts at red (hue 0)
-  for(int a=0; a<30; a++) {  // Repeat 30 times...
-    for(int b=0; b<3; b++) { //  'b' counts from 0 to 2...
-      strip.clear();         //   Set all pixels in RAM to 0 (off)
-      // 'c' counts up from 'b' to end of strip in increments of 3...
-      for(int c=b; c<strip.numPixels(); c += 3) {
-        // hue of pixel 'c' is offset by an amount to make one full
-        // revolution of the color wheel (range 65536) along the length
-        // of the strip (strip.numPixels() steps):
-        int      hue   = firstPixelHue + c * 65536L / strip.numPixels();
-        uint32_t color = strip.gamma32(strip.ColorHSV(hue)); // hue -> RGB
-        strip.setPixelColor(c, color); // Set pixel 'c' to value 'color'
-      }
-      strip.show();                // Update strip with new contents
-      delay(wait);                 // Pause for a moment
-      firstPixelHue += 65536 / 90; // One cycle of color wheel over 90 frames
-    }
+  for (int i = 39; i >= 0; i--){
+    leds[i] = CRGB::Orange;
+    FastLED.show();
+    delay(50);
   }
+  for (int i = 0; i < 40; i++){
+    leds[i] = CRGB::Yellow;
+    FastLED.show();
+    delay(50);
+  }
+  for (int i = 39; i >= 0; i--){
+    leds[i] = CRGB::Green;
+    FastLED.show();
+    delay(50);
+  }
+  for (int i = 0; i < 40; i++){
+    leds[i] = CRGB::Blue;
+    FastLED.show();
+    delay(50);
+  }
+  for (int i = 39; i >= 0; i--){
+    leds[i] = CRGB::Purple;
+    FastLED.show();
+    delay(50);
+  }
+  for (int i = 0; i < 40; i++){
+    leds[i] = CRGB::White;
+    FastLED.show();
+    delay(50);
+  }
+  delay(1000);
 }
