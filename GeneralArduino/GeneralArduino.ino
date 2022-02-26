@@ -26,6 +26,7 @@ void receiveEvent(int bytes) {
 }
 
 void loop() {
+  Serial.println(x);
   // Fill along the length of the strip in various colors
   if (x == 1) {
     Serial.println("red");
@@ -65,44 +66,14 @@ void loop() {
   } else {
     rainbow();
   }
-  receiveEvent(4);
 }
 
 void rainbow(){
-  for (int i = 0; i < 40; i++){
-    leds[i] = CRGB::Red;
+  for (int j = 0; j < 255; j++) {
+    for (int i = 0; i < NUM_LEDS; i++) {
+      leds[i] = CHSV(i - (j * 2), 255, 255);
+    }
     FastLED.show();
-    delay(50);
+    delay(25);
   }
-  for (int i = 39; i >= 0; i--){
-    leds[i] = CRGB::Orange;
-    FastLED.show();
-    delay(50);
-  }
-  for (int i = 0; i < 40; i++){
-    leds[i] = CRGB::Yellow;
-    FastLED.show();
-    delay(50);
-  }
-  for (int i = 39; i >= 0; i--){
-    leds[i] = CRGB::Green;
-    FastLED.show();
-    delay(50);
-  }
-  for (int i = 0; i < 40; i++){
-    leds[i] = CRGB::Blue;
-    FastLED.show();
-    delay(50);
-  }
-  for (int i = 39; i >= 0; i--){
-    leds[i] = CRGB::Purple;
-    FastLED.show();
-    delay(50);
-  }
-  for (int i = 0; i < 40; i++){
-    leds[i] = CRGB::White;
-    FastLED.show();
-    delay(50);
-  }
-  delay(500);
 }
