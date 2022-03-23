@@ -1,79 +1,101 @@
 #include <FastLED.h>
 #include <Wire.h>
+#include <SPI.h>
 
-#define LED_PIN     4
+#define LED_PIN     7
 #define NUM_LEDS    40
+
+
+const int chipSelectPin = 10;
+//  D10 (SS), D11 (MOSI), D12 (MISO), D13 (S ...
 
 CRGB leds[NUM_LEDS];
 int x = 0;
+int step = 0;
+int last = 0;
 
 void setup() {
   Serial.begin(9600);
-  
-  // Start the I2C Bus as Slave on address 1
-  Wire.begin(1); 
-  // Attach a function to trigger when something is received.
-  Wire.onReceive(receiveEvent);
-  
+
+
+
+
   FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
   FastLED.setBrightness(255);
 
-  Wire.setClock(400000);
-}
 
-void receiveEvent(int bytes) {
-  x = Wire.read();    // read one character from the I2C
+
+
+
+  // set the chipSelectPin as an output:
+
+
 }
 
 void loop() {
-  Serial.println(x);
+  step += 1;
+  if (step == 10)
+  {
+    step = 0;
+  }
+
+  if (Serial.available() > 0)
+  {
+    x = Serial.read();
+  }
+
+
+  delay(10);
   // Fill along the length of the strip in various colors
   if (x == 1) {
-    Serial.println("red");
     for (int i = 0; i < 40; i++){
+
       leds[i] = CRGB::Red;
+      leds[i].r /= ((((i+step)%5)8));
       FastLED.show();
-      delay(5);
     }
-  } else if (x == 2) {
-    Serial.println("green");
+  } else if (x == 2 && last != x) {
     for (int i = 0; i < 40; i++){
+      //FastLED.setBrightness((int)(255/(i+step)));
       leds[i] = CRGB::Green;
+      leds[i].g /= ((((i+step)%5)8));
       FastLED.show();
-      delay(5);
     }
-  } else if (x == 3) {
-    Serial.println("blue");
+  } else if (x == 3 && last != x) {
     for (int i = 0; i < 40; i++){
+      //FastLED.setBrightness((int)(255/(i+step)));
       leds[i] = CRGB::Blue;
+      leds[i].b /= ((((i+step)%5)8));
       FastLED.show();
-      delay(5);
     }
-  } else if (x == 4) {
-    Serial.println("yellow");
+  } else if (x == 4 && last != x) {
     for (int i = 0; i < 40; i++){
+      //FastLED.setBrightness((int)(255/(i+step)));
       leds[i] = CRGB::Yellow;
+      leds[i].r /= ((((i+step)%5)8));
+      leds[i].g /= ((((i+step)%5)8));
       FastLED.show();
-      delay(5);
     }
-  } else if (x == 5) {
-    Serial.println("white");
+  } else if (x == 5 && last != x) {
     for (int i = 0; i < 40; i++){
+      //FastLED.setBrightness((int)(255/(i+step)));
       leds[i] = CRGB::White;
+      leds[i].r /= ((((i+step)%5)8));
+      leds[i].g /= ((((i+step)%5)8));
+      leds[i].b /= ((((i+step)%5)8));
       FastLED.show();
-      delay(5);
     }
-  } else {
+  } else if (x == 0){
     rainbow();
   }
+  last = x;
 }
 
 void rainbow(){
-  for (int j = 0; j < 255; j++) {
+  for (int j = 0; j < 255*4; j++) {
     for (int i = 0; i < NUM_LEDS; i++) {
-      leds[i] = CHSV(i - (j * 2), 255, 255);
+      leds[i] = CHSV(i - (j * 0.5), 255, 255);
     }
     FastLED.show();
-    delay(25);
   }
 }
