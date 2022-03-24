@@ -23,30 +23,18 @@ void setup() {
   Wire.begin();
   sensor.begin();
 
-
-
-
   FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
   FastLED.setBrightness(255);
-
-
-
-
-
-  // set the chipSelectPin as an output:
-
-
 }
 
 void loop() {
-  step += 1;
-  if (step == 10)
-  {
+  step++;
+  
+  if (step == 10){
     step = 0;
   }
 
-  if (Serial.available() > 0)
-  {
+  if (Serial.available() > 0){
     x = Serial.read();
   }
 
@@ -54,8 +42,8 @@ void loop() {
   colorValues[1] = sensor.getGreen();
   colorValues[2] = sensor.getBlue();
 
-  Serial.write(colorValues, sizeof(colorValues));
-
+  Serial.write(colorValues, 12);
+  Serial.println("Red: " + String(sensor.getRed()) + " Green: " + String(sensor.getGreen()) + " Blue: " + String(sensor.getBlue()));
 
   delay(10);
   // Fill along the length of the strip in various colors

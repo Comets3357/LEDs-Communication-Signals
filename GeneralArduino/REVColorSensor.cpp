@@ -65,11 +65,11 @@ void REVColorSensor::configureColorSensor(ColorSensorResolution res, ColorSensor
 }
 
 REVColorSensor::Color REVColorSensor::getColor() {
-    uint32_t red = getRed();
-    uint32_t green = getGreen();
-    uint32_t blue = getBlue();
+    byte red = getRed();
+    byte green = getGreen();
+    byte blue = getBlue();
 
-    uint32_t mag = red + green + blue;
+    byte mag = red + green + blue;
 
     return Color(red / mag, green / mag, blue / mag);
 }
@@ -195,7 +195,7 @@ uint32_t REVColorSensor::read20BitRegister(byte reg) {
     return (((uint32_t)raw[0] & 0xFF) | (((uint32_t)raw[1] & 0xFF) << 8) |
                     (((uint32_t)raw[2] & 0xFF) << 16)) & 0x03FFFF;
     } else {
-    return 0;
+        return 0;
     }
 }
 
