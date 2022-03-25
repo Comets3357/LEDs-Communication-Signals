@@ -45,7 +45,7 @@ void REVColorSensor::begin() {
     }
 
     initializeDevice();
-    Serial.println("REV Color Sensor Initialized!");
+//    Serial.println("REV Color Sensor Initialized!");
 
     hasReset();
 }
@@ -121,17 +121,17 @@ bool REVColorSensor::checkForDevice() {
     uint32_t error = Wire.endTransmission();
 
     if (error == 0) {
-        Serial.println("Found REV Color Sensor!");
+//        Serial.println("Found REV Color Sensor!");
         return true;
     } else {
-        Serial.println("Failed to find REV Color Sensor!");
+//        Serial.println("Failed to find REV Color Sensor!");
         return false;
     }
 }
 
 bool REVColorSensor::checkDeviceID() {
     if (readSingleRegister((byte) Register::PART_ID_REG) != PART_ID) {
-        Serial.println("Unknown device found with same I2C addres as REV color sensor!");
+//        Serial.println("Unknown device found with same I2C addres as REV color sensor!");
         return false;
     } else {
         return true;
@@ -203,6 +203,6 @@ void REVColorSensor::write8(byte reg, uint32_t value) {
     Wire.beginTransmission(SENSOR_ADDRESS);
     Wire.write(reg);
     Wire.write(value);
-    if (Wire.endTransmission() == 0) Serial.println("Write Successful!");
-    else Serial.println("Write Failed!");
+//    if (Wire.endTransmission() == 0) Serial.println("Write Successful!");
+//    else Serial.println("Write Failed!");
 }

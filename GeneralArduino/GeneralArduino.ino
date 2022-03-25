@@ -3,7 +3,7 @@
 #include <SPI.h>
 #include "REVColorSensor.h"
 
-#define LED_PIN     7
+#define LED_PIN     4
 #define NUM_LEDS    40
 
 
@@ -42,53 +42,53 @@ void loop() {
   colorValues[1] = sensor.getGreen();
   colorValues[2] = sensor.getBlue();
 
-  Serial.write(colorValues, 12);
-  Serial.println("Red: " + String(sensor.getRed()) + " Green: " + String(sensor.getGreen()) + " Blue: " + String(sensor.getBlue()));
+  Serial.write(colorValues, 3);
+//  Serial.println(String(sensor.getRed()));
 
-  delay(10);
-  // Fill along the length of the strip in various colors
-  if (x == 1) {
-    for (int i = 0; i < 40; i++){
-      
-      leds[i] = CRGB::Red;
-      leds[i].r /= ((((i+step)%5)*8));
-      FastLED.show();
-    }
-  } else if (x == 2 && last != x) {
-    for (int i = 0; i < 40; i++){
-      //FastLED.setBrightness((int)(255/(i+step)));
-      leds[i] = CRGB::Green;
-      leds[i].g /= ((((i+step)%5)*8));
-      FastLED.show();
-    }
-  } else if (x == 3 && last != x) {
-    for (int i = 0; i < 40; i++){
-      //FastLED.setBrightness((int)(255/(i+step)));
-      leds[i] = CRGB::Blue;
-      leds[i].b /= ((((i+step)%5)*8));
-      FastLED.show();
-    }
-  } else if (x == 4 && last != x) {
-    for (int i = 0; i < 40; i++){
-      //FastLED.setBrightness((int)(255/(i+step)));
-      leds[i] = CRGB::Yellow;
-      leds[i].r /= ((((i+step)%5)*8));
-      leds[i].g /= ((((i+step)%5)*8));
-      FastLED.show();
-    }
-  } else if (x == 5 && last != x) {
-    for (int i = 0; i < 40; i++){
-      //FastLED.setBrightness((int)(255/(i+step)));
-      leds[i] = CRGB::White;
-      leds[i].r /= ((((i+step)%5)*8));
-      leds[i].g /= ((((i+step)%5)*8));
-      leds[i].b /= ((((i+step)%5)*8));
-      FastLED.show();
-    }
-  } else if (x == 0){
-    rainbow();
-  }
-  last = x;
+  delay(1);
+//  // Fill along the length of the strip in various colors
+//  if (x == 1) {
+//    for (int i = 0; i < 40; i++){
+//      
+//      leds[i] = CRGB::Red;
+//      leds[i].r /= ((((i+step)%5)*8));
+//      FastLED.show();
+//    }
+//  } else if (x == 2) {
+//    for (int i = 0; i < 40; i++){
+//      //FastLED.setBrightness((int)(255/(i+step)));
+//      leds[i] = CRGB::Green;
+//      leds[i].g /= ((((i+step)%5)*8));
+//      FastLED.show();
+//    }
+//  } else if (x == 3) {
+//    for (int i = 0; i < 40; i++){
+//      //FastLED.setBrightness((int)(255/(i+step)));
+//      leds[i] = CRGB::Blue;
+//      leds[i].b /= ((((i+step)%5)*8));
+//      FastLED.show();
+//    }
+//  } else if (x == 4) {
+//    for (int i = 0; i < 40; i++){
+//      //FastLED.setBrightness((int)(255/(i+step)));
+//      leds[i] = CRGB::Yellow;
+//      leds[i].r /= ((((i+step)%5)*8));
+//      leds[i].g /= ((((i+step)%5)*8));
+//      FastLED.show();
+//    }
+//  } else if (x == 5) {
+//    for (int i = 0; i < 40; i++){
+//      //FastLED.setBrightness((int)(255/(i+step)));
+//      leds[i] = CRGB::White;
+//      leds[i].r /= ((((i+step)%5)*8));
+//      leds[i].g /= ((((i+step)%5)*8));
+//      leds[i].b /= ((((i+step)%5)*8));
+//      FastLED.show();
+//    }
+//  } else {
+//    rainbow();
+//  }
+//  last = x;
 }
 
 void rainbow(){
